@@ -19,10 +19,15 @@ import Link from "next/link";
 
 const ProfileInfo = () => {
   const { data: session } = useSession();
+
+  // Safely extract email and store it in a variable
+  const userEmail = session?.user?.email || "No email provided";
+  console.log(session);
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className=" cursor-pointer">
-        <div className=" flex items-center  ">
+      <DropdownMenuTrigger asChild className="cursor-pointer">
+        <div className="flex items-center">
           {session?.user?.image && (
             <Image
               src={session?.user?.image}
@@ -46,14 +51,13 @@ const ProfileInfo = () => {
             />
           )}
           <div>
-            <div className="text-sm font-medium text-default-800 capitalize ">
-              {session?.user?.name ?? "Mcc Callem"}
+            <div className="text-sm font-medium text-default-800 capitalize">
+              {session?.user?.email ?? "Mcc Callem"}
             </div>
             <Link
               href="/dashboard"
-              className="text-xs text-default-600 hover:text-primary"
-            >
-              @CP1 Job-Order
+              className="text-xs text-default-600 hover:text-primary">
+              {/* @CP1 Job-Order */}
             </Link>
           </div>
         </DropdownMenuLabel>
@@ -62,29 +66,18 @@ const ProfileInfo = () => {
             {
               name: "profile",
               icon: "heroicons:user",
-              href:"/user-profile"
-            },
-            {
-              name: "Billing",
-              icon: "heroicons:megaphone",
-              href:"/dashboard"
+              href: "/user-profile",
             },
             {
               name: "Settings",
               icon: "heroicons:paper-airplane",
-              href:"/dashboard"
-            },
-            {
-              name: "Keyboard shortcuts",
-              icon: "heroicons:language",
-              href:"/dashboard"
+              href: "/dashboard",
             },
           ].map((item, index) => (
             <Link
               href={item.href}
               key={`info-menu-${index}`}
-              className="cursor-pointer"
-            >
+              className="cursor-pointer">
               <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 dark:hover:bg-background cursor-pointer">
                 <Icon icon={item.icon} className="w-4 h-4" />
                 {item.name}
@@ -93,12 +86,10 @@ const ProfileInfo = () => {
           ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-      
         <DropdownMenuSeparator className="mb-0 dark:bg-background" />
         <DropdownMenuItem
           onSelect={() => signOut()}
-          className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 dark:hover:bg-background cursor-pointer"
-        >
+          className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 dark:hover:bg-background cursor-pointer">
           <Icon icon="heroicons:power" className="w-4 h-4" />
           Log out
         </DropdownMenuItem>
@@ -106,4 +97,5 @@ const ProfileInfo = () => {
     </DropdownMenu>
   );
 };
+
 export default ProfileInfo;

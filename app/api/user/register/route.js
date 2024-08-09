@@ -1,8 +1,8 @@
 // pages/api/user/register.js
 
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma'; // Adjust the path to your prisma client
-import bcrypt from 'bcrypt';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma"; // Adjust the path to your prisma client
+import bcrypt from "bcrypt";
 
 export async function POST(request) {
   try {
@@ -16,8 +16,8 @@ export async function POST(request) {
 
     if (foundUser) {
       return NextResponse.json({
-        status: 'fail',
-        message: 'User already exists',
+        status: "fail",
+        message: "User already exists",
       });
     }
 
@@ -30,20 +30,21 @@ export async function POST(request) {
         name,
         email,
         password: hashedPassword,
-        image: '/images/avatar/avatar-3.jpg', // Use the string path for the image
+        role: "user", // Set default role here
+        image: "/images/avatar/avatar-1.jpg", // Use the string path for the image
       },
     });
 
     return NextResponse.json({
-      status: 'success',
-      message: 'User created successfully',
+      status: "success",
+      message: "User created successfully",
       data: newUser,
     });
   } catch (e) {
-    console.error('An error occurred:', e);
+    console.error("An error occurred:", e);
     return NextResponse.json({
-      status: 'fail',
-      message: 'Something went wrong',
+      status: "fail",
+      message: "Something went wrong",
       data: e.message,
     });
   }

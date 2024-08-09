@@ -14,11 +14,68 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String    @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  image     String?  // Optional field for storing image URL or path
+  image     String?   // Optional field for storing image URL or path
+  role      String   @default("user") // Default role for non-admin users
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  profiles   Profile[]   // One-to-many relationship with Profile
+  activities Activity[]  // One-to-many relationship with Activity
+  documents  Document[]  // One-to-many relationship with Document
+  logs       Log[]       // One-to-many relationship with Log
+}
+
+model Profile {
+  id          String   @id @default(uuid())
+  userId      String
+  firstName   String
+  middleName  String
+  lastName    String
+  phoneNumber String
+  email       String
+  dateHired   DateTime?
+  designation String
+  office      String
+  region      String
+  province    String
+  city        String
+  zipCode     String
+  about       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Log {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  eventType String   // Field to specify the type of event (e.g., "login", "logout")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
